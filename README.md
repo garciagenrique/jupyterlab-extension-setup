@@ -12,19 +12,19 @@ Install `kind` and `helm`, then from the base dir run:
 
 1. `kind create cluster`
 2. ```bash
-  helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
-  helm repo update
-  ```
+   helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+   helm repo update
+   ```
 3. ```bash
-  helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
-  helm repo update
-  helm upgrade --cleanup-on-fail \
-    --install jhub jupyterhub/jupyterhub \
-    --namespace jhub \
-    --create-namespace \
-    --version=2.0.0 \
-    --values helm/config.yaml
-  ```
+   helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+   helm repo update
+   helm upgrade --cleanup-on-fail \
+     --install jhub jupyterhub/jupyterhub \
+     --namespace jhub \
+     --create-namespace \
+     --version=2.0.0 \
+     --values helm/config.yaml
+   ```
 4. `kubectl --namespace=jhub port-forward service/proxy-public 8080:http`
    
 Then goto localhost:8080 and login.
