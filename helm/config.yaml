@@ -63,7 +63,7 @@ hub:
 
 singleuser:
   image:
-    name: gitlab-registry.cern.ch/escape-wp2/docker-images/datalake-singleuser
+    name: ghcr.io/goseind/singleuser-base
     tag: latest
     pullPolicy: Always
   cmd: null
