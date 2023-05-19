@@ -62,6 +62,23 @@ hub:
           c.CryptKeeper.keys = [os.urandom(32)]
 
 singleuser:
+  storage:
+    extraVolumes:
+      - name: eulake-escape-data
+        hostPath:
+          path: /var/eos-eulake-home/eulake/escape/data
+      - name: eulake-escape-tmp
+        hostPath:
+          path: /var/eos-eulake-home/eulake/escape/tmp_data
+    extraVolumeMounts:
+      - name: eulake-escape-data
+        mountPath: /eos/escape/
+        mountPropagation: HostToContainer
+        readOnly: true
+      - name: eulake-escape-tmp
+        mountPath: /scratch/
+        mountPropagation: HostToContainer
+
   image:
     name: ghcr.io/goseind/singleuser-base
     tag: latest
@@ -72,11 +89,11 @@ singleuser:
       mountPath: /opt/cert.pem
       stringData: |
         -----BEGIN CERTIFICATE-----
-        <cert-content>
+        <certificate>
         -----END CERTIFICATE-----
 
   extraEnv:
-    RUCIO_MODE: "download"
+    RUCIO_MODE: "replica"
     RUCIO_WILDCARD_ENABLED: "1"
     RUCIO_BASE_URL: "https://vre-rucio.cern.ch"
     RUCIO_AUTH_URL: "https://vre-rucio.cern.ch"
@@ -89,3 +106,6 @@ singleuser:
     RUCIO_DEFAULT_AUTH_TYPE: "oidc"
     RUCIO_OAUTH_ID: "rucio"
     RUCIO_DEFAULT_INSTANCE: "vre-rucio.cern.ch"
+    RUCIO_DESTINATION_RSE: "CERN-EOS"
+    RUCIO_RSE_MOUNT_PATH: "/eos/escape"
+    RUCIO_PATH_BEGINS_AT: "5"
