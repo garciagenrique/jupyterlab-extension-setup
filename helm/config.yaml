@@ -1,8 +1,8 @@
 hub:
   config:
     RucioAuthenticator:
-      client_id: "***REMOVED***"
-      client_secret: "***REMOVED***"
+      client_id: ""
+      client_secret: ""
       authorize_url: "https://iam-escape.cloud.cnaf.infn.it/authorize"
       token_url: https://iam-escape.cloud.cnaf.infn.it/token
       userdata_url: https://iam-escape.cloud.cnaf.infn.it/userinfo
