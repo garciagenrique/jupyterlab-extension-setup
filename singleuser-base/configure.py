@@ -3,7 +3,7 @@ import json
 
 def write_token():
     env_var_content = os.getenv('REFRESH_TOKEN')
-    file_path = 'refresh_token'
+    file_path = '/home/jovyan/refresh_token'
     with open(file_path, 'w') as file:
         file.write(env_var_content)
 

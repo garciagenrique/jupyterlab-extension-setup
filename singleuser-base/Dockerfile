@@ -26,9 +26,12 @@ RUN wget -q -O - https://dist.eugridpma.info/distribution/igtf/current/GPG-KEY-E
 
 RUN pip install ipykernel
 
-RUN apt update \
-    && add-apt-repository 'deb http://repository.egi.eu/sw/production/cas/1/current egi-igtf core' \
-    && apt -y install ca-certificates ca-policy-egi-core
+# RUN apt update \
+#     && add-apt-repository 'deb http://repository.egi.eu/sw/production/cas/1/current egi-igtf core' \
+#     && apt -y install ca-certificates ca-policy-egi-core
+
+COPY ./repo /etc/yum.repos.d/
+RUN yum install -y CERN-CA-certs
 
 # CERN specific configuration: grid-security and VOMS setup (remove if not needed)
 RUN mkdir -p /etc/vomses \
@@ -55,7 +58,7 @@ RUN fix-permissions /opt/setup \
     && chmod +x /usr/local/bin/setup.sh
 
 # CERN specific configuration: VRE Data Lake (remove if not needed)
-ENV RUCIO_MODE=download
+ENV RUCIO_MODE=replica
 ENV RUCIO_WILDCARD_ENABLED=1
 ENV RUCIO_BASE_URL=https://vre-rucio.cern.ch
 ENV RUCIO_AUTH_URL=https://vre-rucio-auth.cern.ch
