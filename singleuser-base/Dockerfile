@@ -30,9 +30,6 @@ RUN pip install ipykernel
 #     && add-apt-repository 'deb http://repository.egi.eu/sw/production/cas/1/current egi-igtf core' \
 #     && apt -y install ca-certificates ca-policy-egi-core
 
-COPY ./repo /etc/yum.repos.d/
-RUN yum install -y CERN-CA-certs
-
 # CERN specific configuration: grid-security and VOMS setup (remove if not needed)
 RUN mkdir -p /etc/vomses \
     && wget https://indigo-iam.github.io/escape-docs/voms-config/voms-escape.cloud.cnaf.infn.it.vomses -O /etc/vomses/voms-escape.cloud.cnaf.infn.it.vomses \

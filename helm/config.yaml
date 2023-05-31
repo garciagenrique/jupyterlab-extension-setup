@@ -12,7 +12,7 @@ hub:
         - profile
         - email
   extraConfig:
-    00-first-config: |
+    token-exchange: |
       import pprint
       import os
       import warnings
@@ -62,6 +62,24 @@ hub:
           c.CryptKeeper.keys = [os.urandom(32)]
 
 singleuser:
+  lifecycleHooks:
+    postStart:
+      exec:
+        command:
+          - "sh"
+          - "-c"
+          - >
+            echo -n $REFRESH_TOKEN > /home/jovyan/token;
+            mkdir -p /opt/rucio/etc;
+            echo "[client]" >> /opt/rucio/etc/rucio.cfg;
+            echo "rucio_host = https://vre-rucio.cern.ch" >> /opt/rucio/etc/rucio.cfg;
+            echo "auth_host = https://vre-rucio-auth.cern.ch" >> /opt/rucio/etc/rucio.cfg;
+            echo "ca_cert = /opt/cert.pem" >> /opt/rucio/etc/rucio.cfg;
+            echo "account = $JUPYTERHUB_USER" >> /opt/rucio/etc/rucio.cfg;
+            echo "auth_type = oidc" >> /opt/rucio/etc/rucio.cfg;
+            echo "oidc_audience = rucio" >> /opt/rucio/etc/rucio.cfg;
+            echo "auth_token_file_path = /home/jovyan/token" >> /opt/rucio/etc/rucio.cfg;
+
   storage:
     extraVolumes:
       - name: eulake-escape-data
