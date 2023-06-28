@@ -66,6 +66,8 @@ ENV RUCIO_VOMS_CERTDIR_PATH=/etc/grid-security/certificates
 ENV RUCIO_VOMS_VOMSDIR_PATH=/etc/grid-security/vomsdir
 ENV RUCIO_CA_CERT=/certs/rucio_ca.pem
 ENV RUCIO_DEFAULT_INSTANCE="vre"
+ENV RUCIO_DESTINATION_RSE="CERN-EOS"
+ENV RUCIO_RSE_MOUNT_PATH="/eos/escape"
 
 RUN mkdir -p /opt/rucio \
     && chown -R $NB_UID /opt/rucio \
