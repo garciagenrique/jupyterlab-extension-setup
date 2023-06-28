@@ -1,15 +1,12 @@
-FROM jupyter/scipy-notebook:python-3.9.5
-LABEL author="Domenic Gosein <domenic.gosein@cern.ch>"
-LABEL org.opencontainers.image.source https://github.com/goseind/jupyterlab-extension-setup
+FROM jupyter/scipy-notebook:python-3.9.13
 
 USER $NB_UID
 
-RUN conda install python=3.8 \
-    && conda install -y -c conda-forge python-gfal2 \
+RUN conda install -y -c conda-forge python-gfal2 \
     && conda clean --all -f -y
 
 RUN pip install rucio-jupyterlab>=0.9.8 PyJWT\
-    && jupyter serverextension enable --py rucio_jupyterlab --sys-prefix
+    && jupyter serverextension enable --py rucio_jupyterlab --sys-prefix 
 
 USER root
 
@@ -24,11 +21,12 @@ RUN apt update -y \
 # CERN specific configuration: grid-security and VOMS setup (remove if not needed)
 RUN wget -q -O - https://dist.eugridpma.info/distribution/igtf/current/GPG-KEY-EUGridPMA-RPM-3 | apt-key add -
 
-RUN pip install ipykernel
+RUN pip install ipykernel \
+    && pip install reana-client>=0.9.0 
 
-# RUN apt update \
-#     && add-apt-repository 'deb http://repository.egi.eu/sw/production/cas/1/current egi-igtf core' \
-#     && apt -y install ca-certificates ca-policy-egi-core
+RUN apt update \
+    && add-apt-repository 'deb http://repository.egi.eu/sw/production/cas/1/current egi-igtf core' \
+    && apt -y install ca-certificates ca-policy-egi-core
 
 # CERN specific configuration: grid-security and VOMS setup (remove if not needed)
 RUN mkdir -p /etc/vomses \
@@ -40,7 +38,7 @@ RUN mkdir -p /etc/vomses \
 RUN mkdir /certs \
     && touch /certs/rucio_ca.pem \
     && curl -fsSL 'https://cafiles.cern.ch/cafiles/certificates/CERN%20Root%20Certification%20Authority%202.crt' | openssl x509 -inform DER -out /tmp/cernrootca2.crt \
-    && curl -fsSL 'https://cafiles.cern.ch/cafiles/certificates/CERN%20Grid%20Certification%20Authority.crt' -o /tmp/cerngridca.crt \
+    && curl -fsSL 'https://cafiles.cern.ch/cafiles/certificates/CERN%20Grid%20Certification%20Authority(1).crt' -o /tmp/cerngridca.crt \
     && curl -fsSL 'https://cafiles.cern.ch/cafiles/certificates/CERN%20Certification%20Authority.crt' -o /tmp/cernca.crt \
     && cat /tmp/cernrootca2.crt >> /certs/rucio_ca.pem \
     && cat /tmp/cerngridca.crt >> /certs/rucio_ca.pem \
